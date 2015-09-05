@@ -1,0 +1,14 @@
+/captures
+
+*.iml
+.idea
+.gradle
+gen
+local.properties
+buck-*
+.buckd
+out
+build
+.DS_Store
+_site
+
