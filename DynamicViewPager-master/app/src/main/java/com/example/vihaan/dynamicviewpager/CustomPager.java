@@ -39,7 +39,12 @@ public class CustomPager extends ViewPager {
 
     public void measureCurrentView(View currentView) {
         mCurrentView = currentView;
-        requestLayout();
+         this.post(new Runnable() {
+            @Override
+            public void run() {
+                requestLayout();
+            }
+        });
     }
 
     public int measureFragment(View view) {
