@@ -1,11 +1,12 @@
 package com.example.vihaan.dynamicviewpager;
 
+import android.annotation.TargetApi;
 import android.content.Context;
-import android.support.v4.app.Fragment;
+import android.os.Build;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 /**
  * Created by vihaan on 1/9/15.
@@ -37,9 +38,20 @@ public class CustomPager extends ViewPager {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public void measureCurrentView(View currentView) {
         mCurrentView = currentView;
-        requestLayout();
+        if (mCurrentView.getMeasuredHeight() <= 0){//fix ViewPager doesn't show for the first time-volcanoscar-20161222-start
+            mCurrentView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    mCurrentView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    CustomPager.this.requestLayout();
+                }
+            });
+        }else {//fix ViewPager doesn't show for the first time-volcanoscar-20161222-end
+            requestLayout();
+        }
     }
 
     public int measureFragment(View view) {
